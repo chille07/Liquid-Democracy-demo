@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://ballotsigner.chille.iaik/" xmlns:tns="http://ballotsigner.chille.iaik/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="getVoteSigned" nillable="true" type="tns:getVoteSigned"/>
+
+  <xs:element name="getVoteSignedResponse" nillable="true" type="tns:getVoteSignedResponse"/>
+
+  <xs:element name="login" nillable="true" type="tns:login"/>
+
+  <xs:element name="loginResponse" nillable="true" type="tns:loginResponse"/>
+
+  <xs:complexType name="login">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="something" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="loginResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVoteSigned">
+    <xs:sequence>
+      <xs:element name="vote" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVoteSignedResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
