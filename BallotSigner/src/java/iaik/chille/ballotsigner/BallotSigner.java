@@ -4,17 +4,41 @@
  */
 package iaik.chille.ballotsigner;
 
+import java.io.*;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
  * @author chille
  */
 @WebService(serviceName = "BallotSigner")
-public class BallotSigner {
+public class BallotSigner
+{
   String id = null;
+
+ 
+
+
+
+
+
 
   /**
    * Web service operation
@@ -44,6 +68,7 @@ public class BallotSigner {
   {
     if(id != null)
     {
+
       // TODO: check the vote if visible information is valid and if the user has not voted yet for the topic.
       
 
