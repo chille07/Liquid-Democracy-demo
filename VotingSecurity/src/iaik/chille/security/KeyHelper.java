@@ -21,10 +21,12 @@ import javax.crypto.SecretKey;
  */
 public class KeyHelper
 {
-  KeyHelper()
-  {
-    
-  }
+
+  /**
+   * Generates an AES Key for symmetric Encryption.
+   * @return
+   * @throws Exception
+   */
   public static SecretKey GenerateSymmetricKey() throws Exception
   {
     String algorithm = "AES";
@@ -33,15 +35,57 @@ public class KeyHelper
     return kpg.generateKey();
   }
 
-  public static KeyPair GenerateKeyEncryptionKey() throws Exception
+  /**
+   * Generates a Key for AsymmetricKeyKryptography
+   * @param algorithm f.e. RSA, DSA, ...
+   * @param keysize Keysize in bits
+   * @return
+   * @throws Exception
+   */
+  public static KeyPair GenerateAsymKey(String algorithm, int keysize) throws Exception
   {
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA"); // was RSA
-    kpg.initialize(1024); // must be 512 - 1024 and multiple of 64 for DSA
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance(algorithm); 
+    kpg.initialize(keysize);
+    return kpg.genKeyPair();
+  }
+
+  /**
+   * Generates a RSA Key with 2048 bits. This should last for approx. 20 years.
+   * The Key can be used for KeyEncryption.
+   * @return KeyPair with Private and Public Key
+   * @throws Exception
+   */
+  public static KeyPair GenerateRSAKey() throws Exception
+  {
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+    kpg.initialize(2048);
+    // must be 512 - 1024 and multiple of 64 for DSA
     // 2048 = secure for approx. 20 years
     // http://www.javamex.com/tutorials/cryptography/rsa_key_length.shtml
     return kpg.genKeyPair();
   }
 
+  /**
+   * Generates a DSA Key with 1024 bits. I don't know how secure this really is.
+   * It can be used for Digital Signatures.
+   * @return KeyPair with Private and Public Key
+   * @throws Exception
+   */
+  public static KeyPair GenerateDSAKey() throws Exception
+  {
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
+    kpg.initialize(1024); // must be 512 - 1024 and multiple of 64 for DSA
+    return kpg.genKeyPair();
+  }
+
+  /**
+   * Saves two BigInteger to a File. May be used for KeyPairs like DSA or RSA.
+   * TODO: This was not tested yet!
+   * @param fileName
+   * @param mod
+   * @param exp
+   * @throws Exception
+   */
   private static void saveToFile(String fileName, BigInteger mod, BigInteger exp)
           throws Exception
   {
@@ -62,7 +106,12 @@ public class KeyHelper
     }
   }
 
-
+  /**
+   * This should save a private/public key to a file.
+   * @param kp
+   * @param fileName
+   * @throws Exception
+   */
   public static void saveKey(KeyPair kp, String fileName) throws Exception
   {
     if(1==1) return;
@@ -75,6 +124,13 @@ public class KeyHelper
     //kp.getPrivate();
   }
 
+  /**
+   * this should load a private/Public key from a file.
+   * @param fileName
+   * @param pub
+   * @return
+   * @throws IOException
+   */
   public static Key readKeyFromFile(String fileName, boolean pub) throws IOException
   {
     //InputStream in = ServerConnection.class.getResourceAsStream(keyFileName);

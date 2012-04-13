@@ -4,14 +4,24 @@
  */
 package iaik.chille.security;
 
+/*
 import com.sun.org.apache.xml.internal.security.encryption.EncryptedData;
 import com.sun.org.apache.xml.internal.security.encryption.EncryptedKey;
 import com.sun.org.apache.xml.internal.security.encryption.XMLCipher;
 import com.sun.org.apache.xml.internal.security.keys.KeyInfo;
 import com.sun.org.apache.xml.internal.security.utils.EncryptionConstants;
+* */
 import java.security.Key;
+import org.apache.xml.security.encryption.EncryptedData;
+import org.apache.xml.security.encryption.EncryptedKey;
+import org.apache.xml.security.encryption.XMLCipher;
+import org.apache.xml.security.keys.KeyInfo;
+import org.apache.xml.security.utils.EncryptionConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+
+
 
 /**
  *
@@ -19,10 +29,6 @@ import org.w3c.dom.Element;
  */
 public class XMLEncrypt
 {
-  public static EncryptedKey encryptKey()
-  {
-    return null;
-  }
 
   public static Document encryptAES(
           Key symmetricKey,
@@ -32,13 +38,16 @@ public class XMLEncrypt
           boolean encryptContentsOnly
           ) throws Exception
   {
+    org.apache.xml.security.Init.init(); // TODO: make singleton and do this only one time.
+
     // initialize cipher
+    //XMLCipher keyCipher = XMLCipher.getInstance(XMLCipher.RSA_v1dot5);
     XMLCipher keyCipher = XMLCipher.getInstance(XMLCipher.RSA_OAEP);
     keyCipher.init(XMLCipher.WRAP_MODE, keyEncryptionKey);
 
     // encrypt symmetric key
+    System.out.println("sym key: "+symmetricKey);
     EncryptedKey encryptedKey = keyCipher.encryptKey(document, symmetricKey);
-
 
     // xml
     XMLCipher xmlCipher = XMLCipher.getInstance(XMLCipher.AES_128);

@@ -9,6 +9,7 @@ import iaik.chille.ballotsignerclient.BallotSigner_Service;
 import iaik.chille.elections.common.Choice;
 import iaik.chille.elections.common.Election;
 import iaik.chille.security.KeyHelper;
+import iaik.chille.security.XMLEncrypt;
 import iaik.chille.security.XMLHelper;
 import iaik.chille.security.XMLSignature;
 import java.security.KeyPair;
@@ -16,11 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.znerd.xmlenc.XMLEncoder;
 
 /**
  *
@@ -45,32 +43,75 @@ public class ClientHandler
 
   public void vote(Election el, Choice ch)
   {
-    alert("Trying to vote...","Election: "+el.getId()+" -> Choice: "+ch.getId());
+    try{
+      alert("Trying to vote...","Election: "+el.getId()+" -> Choice: "+ch.getId());
+
+      // TODO: check local if voted already
 
 
-    // TODO: check local if voted already
+      // am i logged in to the ballot signer? (login?)
+      BallotSigner_Service bs_s = new BallotSigner_Service();
+      BallotSigner bs = bs_s.getBallotSignerPort();
+      String login_info = bs.login("id", "anything"); // TODO: dummy login
+      System.out.println("[vote] login returned: "+ login_info);
 
 
-    // am i logged in to the ballot signer? (login?)
-    BallotSigner_Service bs_s = new BallotSigner_Service(); // java.lang.NoClassDefFoundError
-    BallotSigner bs = bs_s.getBallotSignerPort();
-    String login_info = bs.login("id", "anything");
-    alert("login_info", login_info);
-
-    // TODO: encrypt my vote and send to the ballot signer
-    String signed_vote = bs.getVoteSigned("encrypted vote with some information");
-    alert("signed_vote", signed_vote);
-
-    //  XMLSignatureFactory (javax.xml.crypto)
-    // Encrypt: XMLENC
-    XMLEncoder enc;
-    
-
-    // TODO: store my vote locally
+      String zz1 = "[ballotserver_random]"; // TODO: request ZZ1(1) from BallotSigner
+      zz1 = zz1.concat("[local_random]"); // TODO: generate ZZ1(2) locally
 
 
-    // send my vote to the random voting server
+      // TODO: make <Vote>
+      Document doc = XMLHelper.generateDocument();
+      Element vote = doc.createElement("vote");
+      vote.setAttribute("id", zz1);
+      Element election = doc.createElement("election");
+      election.setAttribute("id", el.getId());
+      Element choice = doc.createElement("choice");
+      choice.setAttribute("id", ch.getId());
 
+      doc.appendChild(vote);
+      vote.appendChild(election);
+      election.appendChild(choice);
+
+      // TODO: encrypt my vote (content of vote only)
+      SecretKey aesKey = KeyHelper.GenerateSymmetricKey();
+      KeyPair rsaKey = KeyHelper.GenerateRSAKey();
+      doc = XMLEncrypt.encryptAES(aesKey,rsaKey.getPublic(),doc,vote,false);
+      alert("encrypted_vote",XMLHelper.documentToString(doc));
+
+      doc = XMLEncrypt.decryptAES(doc, rsaKey.getPrivate());
+      alert("decrypted_vote",XMLHelper.documentToString(doc));
+              /*
+               *
+  public static Document encryptAES(
+          Key symmetricKey,
+          Key keyEncryptionKey,
+          Document document,
+          Element elementToEncrypt,
+          boolean encryptContentsOnly
+          ) throws Exception
+               */
+
+      // TODO: send vote to ballot signer
+
+      String xml_vote = XMLHelper.documentToString(doc);
+      String signed_vote = bs.getVoteSigned(xml_vote);
+      alert("signed_vote", signed_vote);
+
+      // TODO: get rejection vote
+
+      // TODO: verify signed_vote's signature
+
+      // TODO: store my vote locally
+
+
+      // TODO: send my vote to the random voting server
+    }
+    catch(Exception ex)
+    {
+      System.err.println("Voting failed: "+ex.toString());
+      ex.printStackTrace();
+    }
 
   }
 
@@ -84,6 +125,12 @@ public class ClientHandler
     // TODO
   }
 
+  /**
+   * This method is just for Testing Signature and cryptographic stuff.
+   * It should be removed when not needed any more.
+   * @param el
+   * @param ch
+   */
   public void test(Election el, Choice ch)
   {
     System.out.println("test()");
@@ -92,15 +139,11 @@ public class ClientHandler
       SecretKey k = KeyHelper.GenerateSymmetricKey();
       KeyHelper.saveKey(kp, "~key1.key");
 
-      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-      dbf.setNamespaceAware(true);
-      Document doc = dbf.newDocumentBuilder().newDocument();
-      //Element root = doc.createElement("root");
-      //Element root = doc.createElementNS("http://chille.iaik.tugraz.at/somewhat","root");
-      Element root = doc.createElementNS("","root");
+      Document doc = XMLHelper.generateDocument();
 
-
+      Element root = doc.createElement("root");
       doc.appendChild(root);
+
       root.appendChild(doc.createElement("test"));
       doc.getElementsByTagName("test").item(0).setTextContent("richtig");
       System.out.println(XMLHelper.documentToString(doc));
@@ -108,9 +151,9 @@ public class ClientHandler
       doc = XMLSignature.signate(doc, kp.getPrivate(), kp);
       System.out.println(XMLHelper.documentToString(doc)); // works until here - 2012-04-12
 
-      doc.getElementsByTagName("test").item(0).setTextContent("richtig");
+      doc.getElementsByTagName("test").item(0).setTextContent("richtig"); // change to force invalid validation
 
-      System.out.println("validate: "+XMLSignature.validate(doc, doc.getDocumentElement(), kp.getPublic())); // TODO
+      System.out.println("validate: "+XMLSignature.validate(doc, doc.getDocumentElement(), kp.getPublic()));
     }
     catch (Exception ex)
     {
