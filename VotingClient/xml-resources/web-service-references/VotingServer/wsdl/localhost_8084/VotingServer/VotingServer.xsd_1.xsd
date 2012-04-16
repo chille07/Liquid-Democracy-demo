@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2-hudson-740-. --><xs:schema xmlns:tns="http://votingserver.chille.iaik/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://votingserver.chille.iaik/">
+
+<xs:element name="getPublicKey" type="tns:getPublicKey" />
+
+<xs:element name="getPublicKeyResponse" type="tns:getPublicKeyResponse" />
+
+<xs:element name="getVote" type="tns:getVote" />
+
+<xs:element name="getVoteResponse" type="tns:getVoteResponse" />
+
+<xs:element name="getVotes" type="tns:getVotes" />
+
+<xs:element name="getVotesResponse" type="tns:getVotesResponse" />
+
+<xs:element name="registerVote" type="tns:registerVote" />
+
+<xs:element name="registerVoteResponse" type="tns:registerVoteResponse" />
+
+<xs:element name="rejectVote" type="tns:rejectVote" />
+
+<xs:element name="rejectVoteResponse" type="tns:rejectVoteResponse" />
+
+<xs:complexType name="getVotes">
+<xs:sequence>
+<xs:element name="electionID" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getVotesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getVote">
+<xs:sequence>
+<xs:element name="electionID" type="xs:string" minOccurs="0" />
+<xs:element name="voteID" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getVoteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerVote">
+<xs:sequence>
+<xs:element name="vote" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerVoteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getPublicKey">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="getPublicKeyResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="rejectVote">
+<xs:sequence>
+<xs:element name="rejection" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="rejectVoteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
