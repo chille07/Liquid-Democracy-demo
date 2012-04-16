@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<schemas xmlns='http://xml.netbeans.org/schema/JAXBWizConfig' destdir='build/generated-sources/jaxb' projectName='ElectionServer' version='1.0'>
+	<schema type='-xmlschema' package='iaik.chille.electionprovider.jaxb' name='XElection'>
+		<xjc-options>
+		</xjc-options>
+		<schema-sources>
+			<schema-source location='src/conf/xml-resources/jaxb/XElection/XElections.xsd' origLocation='web/XElections.xsd'/>
+		</schema-sources>
+		<bindings>
+		</bindings>
+		<catalog/>
+	</schema>
+</schemas>

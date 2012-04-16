@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/exceptions
+END
+IllegalOrphanException.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/exceptions/IllegalOrphanException.java
+END
+NonexistentEntityException.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/exceptions/NonexistentEntityException.java
+END
+PreexistingEntityException.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/exceptions/PreexistingEntityException.java
+END

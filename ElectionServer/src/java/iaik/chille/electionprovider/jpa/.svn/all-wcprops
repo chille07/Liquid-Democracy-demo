@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa
+END
+DBChoiceJpaController.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/DBChoiceJpaController.java
+END
+DBElectionJpaController.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/LiquidDemocracy/!svn/ver/2/project/ElectionServer/src/java/iaik/chille/electionprovider/jpa/DBElectionJpaController.java
+END
