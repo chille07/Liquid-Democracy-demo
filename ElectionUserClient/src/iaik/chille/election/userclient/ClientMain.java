@@ -4,13 +4,18 @@
  */
 package iaik.chille.election.userclient;
 
+import iaik.chille.security.PropertyHandler;
 import iaik.chille.elections.common.Elections;
 import iaik.chille.elections.electionserverclient.ElectionProvider;
 import iaik.chille.elections.electionserverclient.ElectionProvider_Service;
 import java.io.StringReader;
+import java.net.URL;
+import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 /**
  *
@@ -23,18 +28,37 @@ public class ClientMain {
    */
   public static void main(String[] args)
   {
-    System.out.println("\n\n");
+    System.out.flush();
+    System.err.flush();
+    System.out.println("\n");
     System.out.println("-- Starting Election Client --");
     try
     {
-      ElectionProvider_Service eps = new ElectionProvider_Service();
+      XMLViewer.getInstance().setVisible(true);
+      PropertyHandler p = PropertyHandler.getInstance();
+
+      // following wrong results in "CM4" error: ... is not a valid service
+      QName ELECTIONPROVIDER_QNAME = new QName(p.get("ELECTIONPROVIDER_QNAME",
+              "http://electionprovider.chille.iaik/"), "ElectionProvider");
+
+      // following wrong results in "CM4" error: failed to access the wsdl at: ...
+      URL url = new URL(p.get("ELECTIONPROVIDER_WSDL",
+              "http://localhost:8084/ElectionServer/ElectionProvider?wsdl"));
+      
+      ElectionProvider_Service eps = new ElectionProvider_Service(url, ELECTIONPROVIDER_QNAME);
       ElectionProvider ep = eps.getElectionProviderPort();
+      
+      // following wrong results in "CM2" error: Webservice is not started or not reachable
+      ((BindingProvider)ep).getRequestContext().put(
+              BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+              p.get("ELECTIONPROVIDER_URL","http://localhost:8084/ElectionServer/ElectionProvider"));
+      
+      System.out.println("Connecting to ElectionProvider and requesting Version.");
+      System.out.println("Version is "+ep.getVersion()+".");
 
-      System.out.println("Connecting to Service and requesting Version.");
-      System.out.println(ep.getVersion());
-      System.out.println("End of Program.");
-
+      // Request Election information in xml Format
       String xml = ep.getElectionInformation();
+      XMLViewer.getInstance().addXML("Election Information",xml);
 
       try
       {
@@ -44,8 +68,8 @@ public class ClientMain {
         StringReader sr = new StringReader(xml);
         els = (Elections) unms.unmarshal(sr);
 
-        System.out.println("So viele Elemente sind drinnen: "+els.getElection().size());
-        System.out.println(xml);
+        System.out.println("Count of elements: "+els.getElection().size());
+        //System.out.println(xml); // DEBUG
 
         // Start GUI
         MainFrame2 mf2 = new MainFrame2(els);
@@ -53,6 +77,7 @@ public class ClientMain {
       }
       catch(JAXBException ex)
       {
+        alert("Parsing Error","CM1: I received invalid xml-data.\nMaybe we need an update.");
         System.err.println("The Given Message was no XML-Data: \n\n");
         System.err.println(xml+"\n\n");
         System.err.println(ex.getMessage());
@@ -60,17 +85,28 @@ public class ClientMain {
     }
     catch(com.sun.xml.internal.ws.client.ClientTransportException ex)
     {
+      alert("Connection Error","CM2: Webservice is not started or not reachable.");
       System.err.println("## WebService is not started or not reachable. ##");
       System.err.println(ex.getMessage());
 
+      // just for testing
+      // TODO: maybe remove following 3 lines in real application.
+      alert("Test","CM3: For testing reasons i will start the program.");
       MainFrame2 mf2 = new MainFrame2(null);
       mf2.setVisible(true);
     }
     catch(Exception ex)
     {
+      alert("Unexpected Error","CM4: A strange error occured: "+ex.getMessage());
       System.err.println("## Other error occured. ##");
       System.err.println(ex.getMessage());
     }
+ 
+  }
 
+
+  public static void alert(String title, String msg)
+  {
+    JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
   }
 }

@@ -4,9 +4,7 @@
  */
 package iaik.chille.security;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,7 +20,7 @@ import org.xml.sax.SAXException;
  */
 public class XMLHelper
 {
-  public static Document parseFile(String xml) throws ParserConfigurationException, SAXException, IOException
+  public static Document parseXML(String xml) throws ParserConfigurationException, SAXException, IOException
   {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
@@ -61,6 +59,43 @@ public class XMLHelper
     {
       baos.close();
     }
+  }
+
+  public static void documentToFile(Document doc, String filename) throws Exception
+  {
+    System.out.println("[xml] export document to '"+filename+"'.");
+    
+    TransformerFactory factory = TransformerFactory.newInstance();
+    Transformer transformer = factory.newTransformer();
+    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+
+    DOMSource src = new DOMSource(doc);
+    FileOutputStream fs = new FileOutputStream(filename, false);
+    try
+    {
+      StreamResult sr = new StreamResult(fs);
+      transformer.transform(src, sr);
+    }
+    finally
+    {
+      fs.close();
+    }
+  }
+
+  public static Document fileToDocument(String filename) throws Exception
+  {
+    System.out.println("[xml] read document from '"+filename+"'.");
+    
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    factory.setNamespaceAware(true);
+    DocumentBuilder db = factory.newDocumentBuilder();
+    try
+    (FileInputStream sr = new FileInputStream(filename))
+    {
+      Document document = db.parse(sr);
+      return document;
+    }
+    
   }
 
   public static Document generateDocument() throws ParserConfigurationException

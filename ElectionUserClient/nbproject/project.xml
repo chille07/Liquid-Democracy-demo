@@ -32,7 +32,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>LDBeans</foreign-project>
+                <foreign-project>VotingClient</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

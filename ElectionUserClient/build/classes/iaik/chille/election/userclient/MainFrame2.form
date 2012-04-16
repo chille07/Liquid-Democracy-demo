@@ -3,9 +3,6 @@
 <Form version="1.8" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.FrameFormInfo">
   <Properties>
     <Property name="name" type="java.lang.String" value=""/>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[452, 443]"/>
-    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>

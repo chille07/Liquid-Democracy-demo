@@ -13,6 +13,12 @@
     <message name="getVoteRejectionListResponse"/>
     <message name="reject"/>
     <message name="rejectResponse"/>
+    <message name="getZZ1"/>
+    <message name="getZZ1Response"/>
+    <message name="getPublicKey"/>
+    <message name="getPublicKeyResponse"/>
+    <message name="getRejectionSigned"/>
+    <message name="getRejectionSignedResponse"/>
     <portType name="BallotSigner">
         <operation name="login">
             <input message="tns:login"/>
@@ -29,6 +35,18 @@
         <operation name="reject">
             <input message="tns:reject"/>
             <output message="tns:rejectResponse"/>
+        </operation>
+        <operation name="getZZ1">
+            <input message="tns:getZZ1"/>
+            <output message="tns:getZZ1Response"/>
+        </operation>
+        <operation name="getPublicKey">
+            <input message="tns:getPublicKey"/>
+            <output message="tns:getPublicKeyResponse"/>
+        </operation>
+        <operation name="getRejectionSigned">
+            <input message="tns:getRejectionSigned"/>
+            <output message="tns:getRejectionSignedResponse"/>
         </operation>
     </portType>
     <binding name="BallotSignerPortBinding" type="tns:BallotSigner">
@@ -48,8 +66,44 @@
             <input/>
             <output/>
         </operation>
+        <operation name="getZZ1">
+            <input/>
+            <output/>
+        </operation>
+        <operation name="getPublicKey">
+            <input/>
+            <output/>
+        </operation>
+        <operation name="getRejectionSigned">
+            <input/>
+            <output/>
+        </operation>
     </binding>
     <service name="BallotSigner">
         <port name="BallotSignerPort" binding="tns:BallotSignerPortBinding"/>
     </service>
+    <wsp:Policy wsu:Id="BallotSignerPortBinding_getRejectionSigned_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="BallotSignerPortBinding_getRejectionSigned_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
 </definitions>

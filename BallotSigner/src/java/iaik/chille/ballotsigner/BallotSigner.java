@@ -4,23 +4,20 @@
  */
 package iaik.chille.ballotsigner;
 
-import java.io.*;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.RSAPublicKeySpec;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.jws.WebService;
+import iaik.chille.security.KeyHelper;
+import iaik.chille.security.XMLHelper;
+import iaik.chille.security.XMLSignature;
+import java.io.File;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.jws.WebService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,12 +28,36 @@ import org.w3c.dom.Element;
 @WebService(serviceName = "BallotSigner")
 public class BallotSigner
 {
-  String id = null;
-
- 
-
-
-
+  protected String id = null;
+  protected String zz1 = "";
+  protected String rejectionCode = "";
+  
+  public static String keyFile = "ballotsigner3.key";
+  // notice: same code is in VotingServer.java
+  protected static KeyPair _kp = null;
+  protected static KeyPair getKeyPair() throws Exception
+  {
+    if(_kp==null)
+    {
+      File file = new File(keyFile);
+      if(file.exists())
+      {
+        KeyHelper.loadKeyStore(keyFile, "pw");
+        Key publicKey = KeyHelper.getKey("dsa_public", "pw");
+        Key privateKey = KeyHelper.getKey("dsa_private", "pw");
+        _kp = new KeyPair((PublicKey)publicKey, (PrivateKey)privateKey);
+      }
+      else
+      {
+        KeyHelper.generateKeyStore();
+        _kp = KeyHelper.GenerateDSAKey();
+        KeyHelper.storeKey("dsa_public", "pw", _kp.getPublic());
+        KeyHelper.storeKey("dsa_private", "pw", _kp.getPrivate());
+        KeyHelper.saveKeyStore(keyFile,"pw");
+      }
+    }
+    return _kp;
+  }
 
 
 
@@ -64,20 +85,65 @@ public class BallotSigner
    * vote should be an xml code
    */
   @WebMethod(operationName = "getVoteSigned")
-  public String getVoteSigned(@WebParam(name = "vote") String vote)
+  public String getVoteSigned(@WebParam(name = "vote") String xml)
   {
     if(id != null)
     {
+      try // TODO: prevent errors by checking ranges before accessing item(0).
+      {
+        // format: <vote id=".."><election id=".."><choice id=".."/></election></vote>
+        Document doc = XMLHelper.parseXML(xml);
+        Element vote = (Element) doc.getElementsByTagName("vote").item(0);
+        Element election = (Element) vote.getElementsByTagName("election").item(0);
+        // note: we cannot access the encrypted vote here.
 
-      // TODO: check the vote if visible information is valid and if the user has not voted yet for the topic.
-      
+        // TODO: check if electionid is valid
+        if(election.getAttribute("id").compareTo("ABC")==0)
+        {
+          return "* Vote rejected: Election is not valid at this time.";
+        }
+        if("blubb".equals(id)) // TODO: user has already voted
+        {
+          return "* Vote rejected: User has already voted.";
+        }
 
-      // TODO: do a real digital signature
-      return "["+vote+"]"; // signed
+        if(!vote.getAttribute("id").startsWith(zz1))
+        {
+          zz1 = "";
+          return "* Vote rejected: ID of Vote does not match.";
+        }
+        if(vote.getAttribute("id").length()< zz1.length()*2)
+        {
+          zz1 = "";
+          return "* Vote rejected: ID of Ballot is too short.";
+        }
+        zz1 = "";
+
+        // do the signature
+        KeyPair kp = BallotSigner.getKeyPair();
+        Document sig_doc = XMLSignature.signate(doc, kp.getPrivate(), kp);
+        String returnvalue = XMLHelper.documentToString(sig_doc);
+
+        // also generate rejection code
+        vote.removeChild(vote.getElementsByTagName("Signature").item(0));
+        election.removeChild(election.getFirstChild());
+        doc.renameNode(vote,"","rejection");
+        sig_doc = XMLSignature.signate(doc, kp.getPrivate(), kp);
+        rejectionCode = XMLHelper.documentToString(sig_doc);
+
+        // return the signed document
+        return returnvalue;
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+        Logger.getLogger(BallotSigner.class.getName()).log(Level.SEVERE, null, ex);
+        return "* Exception: "+ex.toString();
+      }
     }
     else
     {
-      return "Error: not logged in";
+      return "* Error: not logged in";
     }
   }
 
@@ -87,9 +153,32 @@ public class BallotSigner
   @WebMethod(operationName = "getVoteRejectionList")
   public String getVoteRejectionList(@WebParam(name = "electionid") String electionid)
   {
-    //TODO write your implementation code here:
-    return null;
+    try
+    {
+      Document doc = XMLHelper.generateDocument();
+      Element rejectionList = doc.createElement("rejectionlist");
+      rejectionList.setAttribute("electionid", electionid);
+      doc.appendChild(rejectionList);
+
+      //schleife
+      {
+        Element rejection = doc.createElement("rejection");
+        rejection.setAttribute("id","TODO");
+        rejectionList.appendChild(rejection);
+      }
+
+      KeyPair kp = KeyHelper.GenerateDSAKey(); // TODO: load key
+      doc = XMLSignature.signate(doc, kp.getPrivate(), kp);
+
+      return XMLHelper.documentToString(doc);
+    } catch (Exception ex)
+    {
+      ex.printStackTrace();
+      return "* Error: "+ex.toString();
+    }
   }
+
+  
 
   /**
    * Web service operation
@@ -97,7 +186,42 @@ public class BallotSigner
   @WebMethod(operationName = "reject")
   public String reject(@WebParam(name = "rejection_vote") String rejection_vote)
   {
-    //TODO write your implementation code here:
-    return null;
+    return rejectionCode;
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "getZZ1")
+  public String getZZ1() {
+    zz1 = UUID.randomUUID().toString();
+    return zz1;
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "getPublicKey")
+  public String getPublicKey(@WebParam(name = "electionid") String electionid)
+  {
+    try
+    {
+      return KeyHelper.getBase64FromKey(BallotSigner.getKeyPair().getPublic());
+    }
+    catch (Exception ex)
+    {
+      return "* Error: "+ex.toString();
+    }
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "getRejectionSigned")
+  public String getRejectionSigned()
+  {
+    String returnvalue = rejectionCode;
+    rejectionCode = "";
+    return returnvalue;
   }
 }

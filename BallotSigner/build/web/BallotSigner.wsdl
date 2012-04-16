@@ -6,11 +6,17 @@
       <xsd:import namespace="http://ballotsigner.chille.iaik/" schemaLocation="BallotSigner_schema1.xsd"/>
     </xsd:schema>
   </types>
-  <message name="getVoteSigned">
-    <part name="parameters" element="tns:getVoteSigned"/>
+  <message name="getPublicKey">
+    <part name="parameters" element="tns:getPublicKey"/>
   </message>
-  <message name="getVoteSignedResponse">
-    <part name="parameters" element="tns:getVoteSignedResponse"/>
+  <message name="getPublicKeyResponse">
+    <part name="parameters" element="tns:getPublicKeyResponse"/>
+  </message>
+  <message name="reject">
+    <part name="parameters" element="tns:reject"/>
+  </message>
+  <message name="rejectResponse">
+    <part name="parameters" element="tns:rejectResponse"/>
   </message>
   <message name="login">
     <part name="parameters" element="tns:login"/>
@@ -18,19 +24,72 @@
   <message name="loginResponse">
     <part name="parameters" element="tns:loginResponse"/>
   </message>
+  <message name="getVoteSigned">
+    <part name="parameters" element="tns:getVoteSigned"/>
+  </message>
+  <message name="getVoteSignedResponse">
+    <part name="parameters" element="tns:getVoteSignedResponse"/>
+  </message>
+  <message name="getRejectionSigned">
+    <part name="parameters" element="tns:getRejectionSigned"/>
+  </message>
+  <message name="getRejectionSignedResponse">
+    <part name="parameters" element="tns:getRejectionSignedResponse"/>
+  </message>
+  <message name="getVoteRejectionList">
+    <part name="parameters" element="tns:getVoteRejectionList"/>
+  </message>
+  <message name="getVoteRejectionListResponse">
+    <part name="parameters" element="tns:getVoteRejectionListResponse"/>
+  </message>
+  <message name="getZZ1">
+    <part name="parameters" element="tns:getZZ1"/>
+  </message>
+  <message name="getZZ1Response">
+    <part name="parameters" element="tns:getZZ1Response"/>
+  </message>
   <portType name="BallotSigner">
-    <operation name="getVoteSigned">
-      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedRequest" message="tns:getVoteSigned"/>
-      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedResponse" message="tns:getVoteSignedResponse"/>
+    <operation name="getPublicKey">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getPublicKeyRequest" message="tns:getPublicKey"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getPublicKeyResponse" message="tns:getPublicKeyResponse"/>
+    </operation>
+    <operation name="reject">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/rejectRequest" message="tns:reject"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/rejectResponse" message="tns:rejectResponse"/>
     </operation>
     <operation name="login">
       <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/loginRequest" message="tns:login"/>
       <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/loginResponse" message="tns:loginResponse"/>
     </operation>
+    <operation name="getVoteSigned">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedRequest" message="tns:getVoteSigned"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedResponse" message="tns:getVoteSignedResponse"/>
+    </operation>
+    <operation name="getRejectionSigned">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getRejectionSignedRequest" message="tns:getRejectionSigned"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getRejectionSignedResponse" message="tns:getRejectionSignedResponse"/>
+    </operation>
+    <operation name="getVoteRejectionList">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteRejectionListRequest" message="tns:getVoteRejectionList"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getVoteRejectionListResponse" message="tns:getVoteRejectionListResponse"/>
+    </operation>
+    <operation name="getZZ1">
+      <input wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getZZ1Request" message="tns:getZZ1"/>
+      <output wsam:Action="http://ballotsigner.chille.iaik/BallotSigner/getZZ1Response" message="tns:getZZ1Response"/>
+    </operation>
   </portType>
   <binding name="BallotSignerPortBinding" type="tns:BallotSigner">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-    <operation name="getVoteSigned">
+    <operation name="getPublicKey">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="reject">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -40,6 +99,42 @@
       </output>
     </operation>
     <operation name="login">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVoteSigned">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getRejectionSigned">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getVoteRejectionList">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getZZ1">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -51,7 +146,7 @@
   </binding>
   <service name="BallotSigner">
     <port name="BallotSignerPort" binding="tns:BallotSignerPortBinding">
-      <soap:address location="http://localhost:8084/BallotSigner/BallotSigner"/>
+      <soap:address location="REPLACE_WITH_ACTUAL_URL"/>
     </port>
   </service>
 </definitions>

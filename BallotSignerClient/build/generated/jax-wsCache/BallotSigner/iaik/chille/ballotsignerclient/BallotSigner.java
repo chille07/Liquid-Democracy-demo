@@ -26,18 +26,33 @@ public interface BallotSigner {
 
     /**
      * 
-     * @param vote
+     * @param electionid
      * @return
      *     returns java.lang.String
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getVoteSigned", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteSigned")
-    @ResponseWrapper(localName = "getVoteSignedResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteSignedResponse")
-    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedResponse")
-    public String getVoteSigned(
-        @WebParam(name = "vote", targetNamespace = "")
-        String vote);
+    @RequestWrapper(localName = "getPublicKey", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetPublicKey")
+    @ResponseWrapper(localName = "getPublicKeyResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetPublicKeyResponse")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getPublicKeyRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/getPublicKeyResponse")
+    public String getPublicKey(
+        @WebParam(name = "electionid", targetNamespace = "")
+        String electionid);
+
+    /**
+     * 
+     * @param rejectionVote
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "reject", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.Reject")
+    @ResponseWrapper(localName = "rejectResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.RejectResponse")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/rejectRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/rejectResponse")
+    public String reject(
+        @WebParam(name = "rejectionVote", targetNamespace = "")
+        String rejectionVote);
 
     /**
      * 
@@ -56,5 +71,59 @@ public interface BallotSigner {
         String id,
         @WebParam(name = "something", targetNamespace = "")
         String something);
+
+    /**
+     * 
+     * @param vote
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getVoteSigned", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteSigned")
+    @ResponseWrapper(localName = "getVoteSignedResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteSignedResponse")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/getVoteSignedResponse")
+    public String getVoteSigned(
+        @WebParam(name = "vote", targetNamespace = "")
+        String vote);
+
+    /**
+     * 
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getRejectionSigned", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetRejectionSigned")
+    @ResponseWrapper(localName = "getRejectionSignedResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetRejectionSignedResponse")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getRejectionSignedRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/getRejectionSignedResponse")
+    public String getRejectionSigned();
+
+    /**
+     * 
+     * @param electionid
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getVoteRejectionList", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteRejectionList")
+    @ResponseWrapper(localName = "getVoteRejectionListResponse", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetVoteRejectionListResponse")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getVoteRejectionListRequest", output = "http://ballotsigner.chille.iaik/BallotSigner/getVoteRejectionListResponse")
+    public String getVoteRejectionList(
+        @WebParam(name = "electionid", targetNamespace = "")
+        String electionid);
+
+    /**
+     * 
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getZZ1", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetZZ1")
+    @ResponseWrapper(localName = "getZZ1Response", targetNamespace = "http://ballotsigner.chille.iaik/", className = "iaik.chille.ballotsignerclient.GetZZ1Response")
+    @Action(input = "http://ballotsigner.chille.iaik/BallotSigner/getZZ1Request", output = "http://ballotsigner.chille.iaik/BallotSigner/getZZ1Response")
+    public String getZZ1();
 
 }

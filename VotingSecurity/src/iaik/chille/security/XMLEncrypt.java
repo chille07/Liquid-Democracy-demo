@@ -4,13 +4,6 @@
  */
 package iaik.chille.security;
 
-/*
-import com.sun.org.apache.xml.internal.security.encryption.EncryptedData;
-import com.sun.org.apache.xml.internal.security.encryption.EncryptedKey;
-import com.sun.org.apache.xml.internal.security.encryption.XMLCipher;
-import com.sun.org.apache.xml.internal.security.keys.KeyInfo;
-import com.sun.org.apache.xml.internal.security.utils.EncryptionConstants;
-* */
 import java.security.Key;
 import org.apache.xml.security.encryption.EncryptedData;
 import org.apache.xml.security.encryption.EncryptedKey;
@@ -67,6 +60,13 @@ public class XMLEncrypt
     return document;
   }
 
+  /**
+   * Decrypts first found encrypted element
+   * @param document
+   * @param keyEncryptionKey
+   * @return
+   * @throws Exception
+   */
   public static Document decryptAES(
           Document document,
           Key keyEncryptionKey

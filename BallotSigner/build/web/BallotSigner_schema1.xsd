@@ -1,13 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" targetNamespace="http://ballotsigner.chille.iaik/" xmlns:tns="http://ballotsigner.chille.iaik/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+  <xs:element name="getPublicKey" nillable="true" type="tns:getPublicKey"/>
+
+  <xs:element name="getPublicKeyResponse" nillable="true" type="tns:getPublicKeyResponse"/>
+
+  <xs:element name="getRejectionSigned" nillable="true" type="tns:getRejectionSigned"/>
+
+  <xs:element name="getRejectionSignedResponse" nillable="true" type="tns:getRejectionSignedResponse"/>
+
+  <xs:element name="getVoteRejectionList" nillable="true" type="tns:getVoteRejectionList"/>
+
+  <xs:element name="getVoteRejectionListResponse" nillable="true" type="tns:getVoteRejectionListResponse"/>
+
   <xs:element name="getVoteSigned" nillable="true" type="tns:getVoteSigned"/>
 
   <xs:element name="getVoteSignedResponse" nillable="true" type="tns:getVoteSignedResponse"/>
 
+  <xs:element name="getZZ1" nillable="true" type="tns:getZZ1"/>
+
+  <xs:element name="getZZ1Response" nillable="true" type="tns:getZZ1Response"/>
+
   <xs:element name="login" nillable="true" type="tns:login"/>
 
   <xs:element name="loginResponse" nillable="true" type="tns:loginResponse"/>
+
+  <xs:element name="reject" nillable="true" type="tns:reject"/>
+
+  <xs:element name="rejectResponse" nillable="true" type="tns:rejectResponse"/>
+
+  <xs:complexType name="getRejectionSigned">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getRejectionSignedResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVoteRejectionList">
+    <xs:sequence>
+      <xs:element name="electionid" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getVoteRejectionListResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="reject">
+    <xs:sequence>
+      <xs:element name="rejectionVote" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="rejectResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPublicKey">
+    <xs:sequence>
+      <xs:element name="electionid" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPublicKeyResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getZZ1">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getZZ1Response">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="login">
     <xs:sequence>

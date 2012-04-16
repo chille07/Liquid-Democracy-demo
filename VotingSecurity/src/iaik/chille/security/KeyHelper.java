@@ -6,14 +6,18 @@ package iaik.chille.security;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
+import java.security.*;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import org.bouncycastle.jce.X509Principal;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.x509.X509V3CertificateGenerator;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -21,6 +25,145 @@ import javax.crypto.SecretKey;
  */
 public class KeyHelper
 {
+  public static KeyStore ks = null; // private?
+
+  public static void writeFile(String fileName, String content) throws FileNotFoundException, IOException
+  {
+    File f = new File(fileName);
+    f.mkdirs();
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
+      out.write(content);
+    }
+  }
+  public static String readFile(String fileName) throws FileNotFoundException, IOException
+  {
+    byte[] buffer = new byte[(int) new File(fileName).length()];
+    BufferedInputStream f = null;
+    try {
+        f = new BufferedInputStream(new FileInputStream(fileName));
+        f.read(buffer);
+    } finally {
+        if (f != null) try { f.close(); } catch (IOException ignored) { }
+    }
+    return new String(buffer);
+  }
+
+  public static String getBase64FromKey(Key rsa) throws Exception
+  {
+    BASE64Encoder encoder = new BASE64Encoder();
+    return encoder.encode(rsa.getEncoded());
+  }
+
+  public static Key getKeyFromBase64(String base64, String algorithm, boolean isPublicKey) throws Exception
+  {
+    // PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(_private.getEncoded()));    // private: PKCS8EncodedKeySpec
+    // public: X509EncodedKeySpec
+
+    BASE64Decoder decoder = new BASE64Decoder();
+    byte[] bt = decoder.decodeBuffer(base64);
+    KeyFactory kf = KeyFactory.getInstance(algorithm);
+
+    try
+    {
+      return isPublicKey ? kf.generatePublic(new X509EncodedKeySpec(bt)) : kf.generatePrivate(new X509EncodedKeySpec(bt));
+    }
+    catch(Exception ex)
+    {
+      System.err.println("Invalid Key in base64-encoding!");
+      ex.printStackTrace();
+      // testing:
+      //KeyPair kp = KeyHelper.GenerateRSAKey();
+      //return KeyHelper.getRSAKeyFromBase64(KeyHelper.getBase64FromRSAKey(kp.getPublic()));
+      throw ex;
+    }
+  }
+
+  public static Key getDSAKeyFromBase64(String base64, boolean isPublic) throws Exception
+  {
+    return KeyHelper.getKeyFromBase64(base64, "DSA", isPublic);
+  }
+  public static Key getRSAKeyFromBase64(String base64, boolean isPublic) throws Exception
+  {
+    return KeyHelper.getKeyFromBase64(base64, "RSA", isPublic);
+  }
+
+  protected static String getDefaultKeyStoreType()
+  {
+    // default type does not support saving public keys.
+    //return KeyStore.getDefaultType();
+
+    // should support public keys according to:
+    // http://khylo.blogspot.com/2009/12/keytool-keystore-cannot-store-non.html
+    return "JCEKS";
+  }
+
+  public static void generateKeyStore() throws Exception
+  {
+    ks = KeyStore.getInstance(getDefaultKeyStoreType());
+    ks.load(null);
+  }
+  
+
+  public static void loadKeyStore(String fileName, String password) throws Exception
+  {
+    ks = KeyStore.getInstance(getDefaultKeyStoreType());
+    try (java.io.FileInputStream fis = new java.io.FileInputStream(fileName)) {
+      ks.load(fis, password.toCharArray());
+    }
+  }
+  public static void saveKeyStore(String fileName, String password) throws Exception
+  {
+    try (java.io.FileOutputStream fos = new java.io.FileOutputStream(fileName)) {
+      ks.store(fos, password.toCharArray());
+    }
+  }
+
+  // http://blog.thilinamb.com/2010/01/how-to-generate-self-signed.html
+  public static java.security.cert.X509Certificate[] createDummyCerts4() throws Exception
+  {
+    Security.addProvider(new BouncyCastleProvider());
+    String domainName = "ld.iaik.tugraz.at";
+
+    X509V3CertificateGenerator v3CertGen = new X509V3CertificateGenerator();
+    long nr =  new SecureRandom().nextInt();
+    if(nr<0)nr*=-1;
+    BigInteger bi = BigInteger.valueOf(nr);
+    v3CertGen.setSerialNumber(bi);
+    v3CertGen.setIssuerDN(new X509Principal("CN=" + domainName + ", OU=None, O=None L=None, C=None"));
+    v3CertGen.setNotBefore(new Date(System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 30));
+    v3CertGen.setNotAfter(new Date(System.currentTimeMillis() + (1000L * 60 * 60 * 24 * 365*10)));
+    v3CertGen.setSubjectDN(new X509Principal("CN=" + domainName + ", OU=None, O=None L=None, C=None"));
+    
+    
+    KeyPair KPair = KeyHelper.GenerateRSAKey();
+    v3CertGen.setPublicKey(KPair.getPublic());
+    v3CertGen.setSignatureAlgorithm("MD5WithRSAEncryption");
+
+    java.security.cert.X509Certificate PKCertificate = v3CertGen.generateX509Certificate(KPair.getPrivate());
+    
+    try (FileOutputStream fos = new FileOutputStream("testCert.cert")) {
+      fos.write(PKCertificate.getEncoded());
+    }
+
+
+    return  new  java.security.cert.X509Certificate[] { PKCertificate };
+  }
+
+ 
+  public static void storeKey(String alias, String password, Key key) throws Exception
+  {
+    //KeyHelper.writeFile("./keystore/"+alias, KeyHelper.getBase64FromKey(key));
+
+    java.security.cert.Certificate[] cert =  createDummyCerts4();
+    ks.setKeyEntry(alias, key, password.toCharArray(), cert);
+  }
+  public static Key getKey(String alias, String password) throws Exception
+  {
+    //KeyHelper.getKeyFromBase64(KeyHelper.readFile(""), "DSA", true);
+
+    // ks must be loaded or generated
+    return ks.getKey(alias, password.toCharArray());
+  }
 
   /**
    * Generates an AES Key for symmetric Encryption.
@@ -124,6 +267,7 @@ public class KeyHelper
     //kp.getPrivate();
   }
 
+
   /**
    * this should load a private/Public key from a file.
    * @param fileName
@@ -142,7 +286,7 @@ public class KeyHelper
     {
       BigInteger m = (BigInteger) ois.readObject();
       BigInteger e = (BigInteger) ois.readObject();
-      RSAPublicKeySpec keySpec = new RSAPublicKeySpec(m, e);
+      RSAPublicKeySpec keySpec = new RSAPublicKeySpec(m, e); // TODO: evtl RSAPrivateKeySpec sometimes?
       KeyFactory fact = KeyFactory.getInstance("RSA");
 
       return pub ? fact.generatePublic(keySpec):fact.generatePrivate(keySpec);
