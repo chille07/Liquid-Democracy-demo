@@ -533,7 +533,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.BallotSignerClient}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
-        <ant antfile="${project.ElectionCommon}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.ElectionClient}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.VotingSecurity}/build.xml" inheritall="false" target="jar">
@@ -544,7 +544,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.BallotSignerClient}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
-        <ant antfile="${project.ElectionCommon}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.ElectionClient}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.VotingSecurity}/build.xml" inheritall="false" target="jar">
@@ -696,22 +696,22 @@ exists or setup the property manually. For example like this:
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
         <copyfiles files="${libs.metro.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.VotingSecurity.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.ElectionCommon.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.BallotSignerClient.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.bcpkix-jdk15on-147.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.bcprov-ext-jdk15on-147.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.santuraio.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.ElectionClient.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
         <copyfiles files="${libs.metro.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.VotingSecurity.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${reference.ElectionCommon.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.BallotSignerClient.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.bcpkix-jdk15on-147.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.bcprov-ext-jdk15on-147.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.santuraio.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.ElectionClient.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1077,7 +1077,7 @@ exists or setup the property manually. For example like this:
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
         <ant antfile="${project.BallotSignerClient}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.ElectionCommon}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.ElectionClient}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.VotingSecurity}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="do-clean">

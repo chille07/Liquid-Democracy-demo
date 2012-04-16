@@ -20,8 +20,8 @@ import javax.persistence.Id;
 public class DBChoice implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+  //@GeneratedValue(strategy = GenerationType.AUTO)
+  private String id;
 
 
   private String answer;
@@ -31,7 +31,7 @@ public class DBChoice implements Serializable {
 
   public DBChoice(Choice get)
   {
-    this.id = UUID.fromString(get.getId());
+    this.id = get.getId();
     this.answer=get.getAnswer();
     this.detail=get.getDetail();
     this.url=get.getUrl();
@@ -54,11 +54,11 @@ public class DBChoice implements Serializable {
   }
 
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 

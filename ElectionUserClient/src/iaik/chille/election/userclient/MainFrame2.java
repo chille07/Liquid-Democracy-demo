@@ -4,9 +4,9 @@
  */
 package iaik.chille.election.userclient;
 
-import iaik.chille.elections.common.Choice;
-import iaik.chille.elections.common.Election;
-import iaik.chille.elections.common.Elections;
+import iaik.chille.electionclient.jaxb.Choice;
+import iaik.chille.electionclient.jaxb.Election;
+import iaik.chille.electionclient.jaxb.Elections;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 

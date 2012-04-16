@@ -4,10 +4,10 @@
  */
 package iaik.chille.election.userclient;
 
+import iaik.chille.electionclient.ElectionProvider;
+import iaik.chille.electionclient.ElectionProvider_Service;
+import iaik.chille.electionclient.jaxb.Elections;
 import iaik.chille.security.PropertyHandler;
-import iaik.chille.elections.common.Elections;
-import iaik.chille.elections.electionserverclient.ElectionProvider;
-import iaik.chille.elections.electionserverclient.ElectionProvider_Service;
 import java.io.StringReader;
 import java.net.URL;
 import javax.swing.JOptionPane;

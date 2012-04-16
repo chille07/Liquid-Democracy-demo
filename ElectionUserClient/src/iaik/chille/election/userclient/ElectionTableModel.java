@@ -4,7 +4,7 @@
  */
 package iaik.chille.election.userclient;
 
-import iaik.chille.elections.common.Elections;
+import iaik.chille.electionclient.jaxb.Elections;
 import javax.swing.table.AbstractTableModel;
 
 /**

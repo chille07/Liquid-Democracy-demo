@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/ElectionServer">
   <Resource auth="Container" driverClassName="org.apache.derby.jdbc.ClientDriver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/electionserver" password="java" type="javax.sql.DataSource" url="jdbc:derby://localhost:1527/electionserver" username="java"/>
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/mysql" password="java" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/electionserver" username="java"/>
 </Context>

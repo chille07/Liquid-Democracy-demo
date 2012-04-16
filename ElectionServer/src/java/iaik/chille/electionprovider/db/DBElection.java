@@ -26,24 +26,32 @@ public class DBElection implements Serializable {
   
   
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
+  //@GeneratedValue(strategy = GenerationType.AUTO)
+  private String id;
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 
+  // columnDefinition="TEXT" is for "long string" ;-)
+
+  
   private String title;
+  @Column(columnDefinition="TEXT")
   private String question;
+  @Column(columnDefinition="TEXT")
   private String url;
+
   private Date validFrom;
   private Date validTo;
-
+  
+  @Column(columnDefinition="TEXT")
   private String privateKey;
+  @Column(columnDefinition="TEXT")
   private String publicKey;
 
   @OneToMany
@@ -171,7 +179,7 @@ public class DBElection implements Serializable {
   public DBElection(Election el)
   {
     this.choice = new Vector<DBChoice>();
-    this.setId(UUID.fromString(el.getId()));
+    this.setId(el.getId());
     this.setPrivateKey(el.getPrivateKey());
     this.setPublicKey(el.getPublicKey());
     this.setQuestion(el.getQuestion());
