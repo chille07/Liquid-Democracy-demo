@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/home/chille/bakk/project/ElectionClient/../ElectionServer/web/XElections.xsd" uri="xml-resources/jaxb/XElections/XElections.xsd"/>
+    <system systemId="http://localhost:8084/ElectionServer/ElectionProvider?wsdl" uri="wsdl/localhost_8084/ElectionServer/ElectionProvider.wsdl"/>
+    <system systemId="http://localhost:8084/ElectionServer/ElectionProvider?xsd=1" uri="wsdl/localhost_8084/ElectionServer/ElectionProvider.xsd_1.xsd"/>
+</catalog>

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2-hudson-740-. --><xs:schema xmlns:tns="http://electionprovider.chille.iaik/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://electionprovider.chille.iaik/">
+
+<xs:element name="getElectionInformation" type="tns:getElectionInformation" />
+
+<xs:element name="getElectionInformationResponse" type="tns:getElectionInformationResponse" />
+
+<xs:element name="getVersion" type="tns:getVersion" />
+
+<xs:element name="getVersionResponse" type="tns:getVersionResponse" />
+
+<xs:element name="getVotingServers" type="tns:getVotingServers" />
+
+<xs:element name="getVotingServersResponse" type="tns:getVotingServersResponse" />
+
+<xs:element name="hello" type="tns:hello" />
+
+<xs:element name="helloResponse" type="tns:helloResponse" />
+
+<xs:complexType name="hello">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="helloResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getVersion">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="getVersionResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getElectionInformation">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="getElectionInformationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getVotingServers">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="getVotingServersResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
