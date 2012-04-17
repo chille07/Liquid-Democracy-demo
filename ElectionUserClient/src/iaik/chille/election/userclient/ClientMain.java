@@ -83,7 +83,8 @@ public class ClientMain {
         System.err.println(ex.getMessage());
       }
     }
-    catch(com.sun.xml.internal.ws.client.ClientTransportException ex)
+    /*
+    catch(ClientTransportException ex)
     {
       alert("Connection Error","CM2: Webservice is not started or not reachable.");
       System.err.println("## WebService is not started or not reachable. ##");
@@ -94,7 +95,7 @@ public class ClientMain {
       alert("Test","CM3: For testing reasons i will start the program.");
       MainFrame2 mf2 = new MainFrame2(null);
       mf2.setVisible(true);
-    }
+    }*/
     catch(Exception ex)
     {
       alert("Unexpected Error","CM4: A strange error occured: "+ex.getMessage());

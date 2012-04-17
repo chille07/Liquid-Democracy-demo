@@ -12,7 +12,7 @@
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.user" value="java"/>
       <property name="eclipselink.ddl-generation.output-mode" value="both"/>
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
   <!--
@@ -28,14 +28,15 @@
     <class>iaik.chille.electionprovider.db.DBChoice</class>
     <class>iaik.chille.electionprovider.db.DBElection</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <shared-cache-mode>NONE</shared-cache-mode> 
+    <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/electionserver"/>
       <property name="javax.persistence.jdbc.password" value="java"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="java"/>
       <property name="eclipselink.ddl-generation.output-mode" value="both"/>
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
+-
 </persistence>

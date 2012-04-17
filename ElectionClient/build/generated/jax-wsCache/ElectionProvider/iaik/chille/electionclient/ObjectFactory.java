@@ -49,19 +49,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVersion }
+     * Create an instance of {@link GetVotingServers }
      * 
      */
-    public GetVersion createGetVersion() {
-        return new GetVersion();
-    }
-
-    /**
-     * Create an instance of {@link GetElectionInformationResponse }
-     * 
-     */
-    public GetElectionInformationResponse createGetElectionInformationResponse() {
-        return new GetElectionInformationResponse();
+    public GetVotingServers createGetVotingServers() {
+        return new GetVotingServers();
     }
 
     /**
@@ -73,11 +65,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetVersion }
+     * 
+     */
+    public GetVersion createGetVersion() {
+        return new GetVersion();
+    }
+
+    /**
      * Create an instance of {@link GetVotingServersResponse }
      * 
      */
     public GetVotingServersResponse createGetVotingServersResponse() {
         return new GetVotingServersResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetElectionInformation }
+     * 
+     */
+    public GetElectionInformation createGetElectionInformation() {
+        return new GetElectionInformation();
     }
 
     /**
@@ -89,19 +97,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVotingServers }
+     * Create an instance of {@link GetElectionInformationResponse }
      * 
      */
-    public GetVotingServers createGetVotingServers() {
-        return new GetVotingServers();
-    }
-
-    /**
-     * Create an instance of {@link GetElectionInformation }
-     * 
-     */
-    public GetElectionInformation createGetElectionInformation() {
-        return new GetElectionInformation();
+    public GetElectionInformationResponse createGetElectionInformationResponse() {
+        return new GetElectionInformationResponse();
     }
 
     /**

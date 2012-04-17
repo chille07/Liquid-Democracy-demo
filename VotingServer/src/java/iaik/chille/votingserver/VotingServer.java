@@ -11,21 +11,18 @@ import iaik.chille.security.PropertyHandler;
 import iaik.chille.security.XMLHelper;
 import iaik.chille.security.XMLSignature;
 import java.io.File;
-import java.io.FileInputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebService;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  *
@@ -103,7 +100,7 @@ public class VotingServer
   // TODO: create config file 
   private BallotSigner getPort() throws Exception
   {
-    PropertyHandler p = PropertyHandler.getInstance();
+    PropertyHandler p = PropertyHandler.getInstance("WEB-INF/connection.properties");
     // following wrong results in "CM4" error: ... is not a valid service
     QName BALLOTSIGNER_QNAME = new QName(p.get("BALLOTSIGNER_QNAME",
             "http://ballotsigner.chille.iaik/"), "BallotSigner");
@@ -146,14 +143,14 @@ public class VotingServer
       }
 
       // store the vote --> filesystem, later evtl. to database
-      String fn = "./votes/"+elid+"/"+voteid+".xml";
-      File f = new File(fn);
+      String folder = "./votes/"+elid;
+      File f = new File(folder);
       f.mkdirs();
-      XMLHelper.documentToFile(doc, fn);
+      XMLHelper.documentToFile(doc, folder+"/"+voteid+".xml");
 
       // give the Client a proof that we accepted the signature
       KeyPair kp = VotingServer.getKeyPair();
-      doc = XMLSignature.signate(doc, null, kp);
+      doc = XMLSignature.signate(doc, kp.getPrivate(), kp);
       return XMLHelper.documentToString(doc);
     }
     catch(Exception ex)

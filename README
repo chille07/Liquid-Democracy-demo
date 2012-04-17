@@ -2,7 +2,24 @@
 
 (Proxy Voting, Java)
 
-This git repository will contain the code of my Bachelor-Thesis.
-Finally it will contain 3 servers, 3 client libraries and a standalone-client.
 
-More Information coming soon...
+This git repository will contain the code of my Bachelor-Thesis.
+Its about Proxy Voting with improved anonymity.
+
+Using: Java, Tomcat, JaxB, WebServices, JPA2.0 (to MySQL), XMLEncryption, XMLSignature, KeyStores, DOM-Parser
+
+There are 3 Types of Servers:
+- ElectionServer: Serves Election Information
+- BallotSigner: Authentifies the User and Signes the Vote(XML) so it is valid.
+- VotingServer: Stores and publishes the Vote.
+Also there is a Client:
+- ElecitonUserClient: that uses all of these Servers for the end-user
+There are some Libraries because they are needed in more projects:
+- BallotSignerClient: WebServiceClient of BallotSigner
+- ElectionClient: WebServiceClient of ElectionServer
+- VotingClient: WebServiceCLient of VotingServer
+- VotingSecurity: Provides XMLEncryption, XMLSignature, XMLHelpers, PropertyReader, KeyStore,...
+
+Basically everything is working, but it is not that easy to configure the Servers. For example the connection.properties-File of the VotingServer has to be stored in the tomcat-bin folder. Detail instructions will be published soon.
+
+-- END OF FILE --

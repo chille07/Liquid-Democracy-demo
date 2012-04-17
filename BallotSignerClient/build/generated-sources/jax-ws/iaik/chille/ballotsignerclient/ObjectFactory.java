@@ -47,83 +47,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetVoteRejectionListResponse }
+     * Create an instance of {@link LoginResponse }
      * 
      */
-    public GetVoteRejectionListResponse createGetVoteRejectionListResponse() {
-        return new GetVoteRejectionListResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetPublicKey }
-     * 
-     */
-    public GetPublicKey createGetPublicKey() {
-        return new GetPublicKey();
-    }
-
-    /**
-     * Create an instance of {@link GetZZ1Response }
-     * 
-     */
-    public GetZZ1Response createGetZZ1Response() {
-        return new GetZZ1Response();
-    }
-
-    /**
-     * Create an instance of {@link GetRejectionSigned }
-     * 
-     */
-    public GetRejectionSigned createGetRejectionSigned() {
-        return new GetRejectionSigned();
-    }
-
-    /**
-     * Create an instance of {@link GetZZ1 }
-     * 
-     */
-    public GetZZ1 createGetZZ1() {
-        return new GetZZ1();
-    }
-
-    /**
-     * Create an instance of {@link Reject }
-     * 
-     */
-    public Reject createReject() {
-        return new Reject();
-    }
-
-    /**
-     * Create an instance of {@link GetVoteSignedResponse }
-     * 
-     */
-    public GetVoteSignedResponse createGetVoteSignedResponse() {
-        return new GetVoteSignedResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetRejectionSignedResponse }
-     * 
-     */
-    public GetRejectionSignedResponse createGetRejectionSignedResponse() {
-        return new GetRejectionSignedResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetVoteRejectionList }
-     * 
-     */
-    public GetVoteRejectionList createGetVoteRejectionList() {
-        return new GetVoteRejectionList();
-    }
-
-    /**
-     * Create an instance of {@link GetPublicKeyResponse }
-     * 
-     */
-    public GetPublicKeyResponse createGetPublicKeyResponse() {
-        return new GetPublicKeyResponse();
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
     }
 
     /**
@@ -135,11 +63,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Login }
+     * Create an instance of {@link GetPublicKey }
      * 
      */
-    public Login createLogin() {
-        return new Login();
+    public GetPublicKey createGetPublicKey() {
+        return new GetPublicKey();
+    }
+
+    /**
+     * Create an instance of {@link GetRejectionSigned }
+     * 
+     */
+    public GetRejectionSigned createGetRejectionSigned() {
+        return new GetRejectionSigned();
+    }
+
+    /**
+     * Create an instance of {@link GetZZ1Response }
+     * 
+     */
+    public GetZZ1Response createGetZZ1Response() {
+        return new GetZZ1Response();
     }
 
     /**
@@ -151,11 +95,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoginResponse }
+     * Create an instance of {@link GetZZ1 }
      * 
      */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
+    public GetZZ1 createGetZZ1() {
+        return new GetZZ1();
+    }
+
+    /**
+     * Create an instance of {@link GetRejectionSignedResponse }
+     * 
+     */
+    public GetRejectionSignedResponse createGetRejectionSignedResponse() {
+        return new GetRejectionSignedResponse();
+    }
+
+    /**
+     * Create an instance of {@link Reject }
+     * 
+     */
+    public Reject createReject() {
+        return new Reject();
+    }
+
+    /**
+     * Create an instance of {@link GetPublicKeyResponse }
+     * 
+     */
+    public GetPublicKeyResponse createGetPublicKeyResponse() {
+        return new GetPublicKeyResponse();
+    }
+
+    /**
+     * Create an instance of {@link Login }
+     * 
+     */
+    public Login createLogin() {
+        return new Login();
+    }
+
+    /**
+     * Create an instance of {@link GetVoteRejectionListResponse }
+     * 
+     */
+    public GetVoteRejectionListResponse createGetVoteRejectionListResponse() {
+        return new GetVoteRejectionListResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVoteSignedResponse }
+     * 
+     */
+    public GetVoteSignedResponse createGetVoteSignedResponse() {
+        return new GetVoteSignedResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetVoteRejectionList }
+     * 
+     */
+    public GetVoteRejectionList createGetVoteRejectionList() {
+        return new GetVoteRejectionList();
     }
 
     /**

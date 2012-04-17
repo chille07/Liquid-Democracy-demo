@@ -29,8 +29,9 @@ public class KeyHelper
 
   public static void writeFile(String fileName, String content) throws FileNotFoundException, IOException
   {
-    File f = new File(fileName);
-    f.mkdirs();
+    File file = new File(fileName);
+    File folder = new File(file.getParent());
+    folder.mkdirs();
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       out.write(content);
     }

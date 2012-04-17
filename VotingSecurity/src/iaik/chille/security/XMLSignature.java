@@ -98,14 +98,33 @@ public class XMLSignature
     * */ return null;
     
   }
+  
 
-  public static boolean validate(Document doc, Element xml, Key publicKey) throws Exception
+  public static boolean validate(Document doc, Node sig, Key publicKey) throws Exception
   {
     System.out.flush();
     System.err.flush();
     System.err.println("********************************************\n\n\n ");
-    NodeList nl = doc.getElementsByTagName("Signature");
-    Node signature = nl.item(0);
+    Node signature = null;
+    if(sig != null)
+    {
+      if(sig.getNodeName().compareToIgnoreCase("Signature")==0)
+        signature = sig;
+    }
+    if(signature == null)
+    {
+      NodeList nl = doc.getElementsByTagName("Signature");
+      if(nl.getLength()>0)
+      {
+        signature = nl.item(0);
+      }
+    }
+    if(signature == null)
+    {
+      System.err.println("No Signature found :-(");
+      return false;
+    }
+
     DOMValidateContext validationContext = new DOMValidateContext(publicKey, signature);
     XMLSignatureFactory signatureFactory = XMLSignatureFactory.getInstance("DOM");
     javax.xml.crypto.dsig.XMLSignature esignature =  signatureFactory.unmarshalXMLSignature(validationContext);

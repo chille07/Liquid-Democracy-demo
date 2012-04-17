@@ -29,6 +29,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -224,7 +225,10 @@ public class ClientHandler
       String finalVote = vs.registerVote(signed_vote);
       XMLViewer.getInstance().addXML("Vote: #6: accepted vote",finalVote);
 
-      if(!XMLSignature.validate(XMLHelper.parseXML(finalVote), null, votingserverkey))
+      Document doc_finalVote = XMLHelper.parseXML(finalVote);
+      Node sig_finalVote = doc_finalVote.getElementsByTagName("Signature").item(1);
+
+      if(!XMLSignature.validate(doc_finalVote, sig_finalVote, votingserverkey))
       {
         System.err.println("[vote] Invalid answer from VotingServer");
         alert("[vote] Error: Invalid Signature","Voting Server has invalid signature.");
