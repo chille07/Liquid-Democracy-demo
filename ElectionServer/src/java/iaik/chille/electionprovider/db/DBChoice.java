@@ -6,17 +6,14 @@ package iaik.chille.electionprovider.db;
 
 import iaik.chille.electionprovider.jaxb.Choice;
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
  *
  * @author chille
  */
-@Entity
+@Entity 
 public class DBChoice implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id

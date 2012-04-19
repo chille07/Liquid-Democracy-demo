@@ -4,15 +4,16 @@
  */
 package iaik.chille.electionprovider.db;
 
-import iaik.chille.electionprovider.jaxb.Choice;
 import iaik.chille.electionprovider.jaxb.Election;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 import java.util.Vector;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
