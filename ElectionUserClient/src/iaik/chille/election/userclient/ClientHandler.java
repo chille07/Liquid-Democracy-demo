@@ -136,22 +136,27 @@ public class ClientHandler
     XMLHelper.documentToFile(doc, "client_unencrypted_vote.xml");
     XMLViewer.getInstance().addXML("Vote: #1: unencrypted vote",XMLHelper.documentToString(doc));
 
-    // encrypt my vote
-    SecretKey aesKey = KeyHelper.GenerateSymmetricKey();
-    //KeyPair rsaKey = KeyHelper.GenerateRSAKey();
-    //Key electionKey = rsaKey.getPublic();
+    boolean voteInPublic = voteInPublic();
 
-    // This is the Public Key of the Election Server for this specific vote.
-    if(el.getPublicKey()==null)
+    if(!voteInPublic)
     {
-      alert("Error","Public Key is null");
+      // encrypt my vote
+      SecretKey aesKey = KeyHelper.GenerateSymmetricKey();
+      //KeyPair rsaKey = KeyHelper.GenerateRSAKey();
+      //Key electionKey = rsaKey.getPublic();
+
+      // This is the Public Key of the Election Server for this specific vote.
+      if(el.getPublicKey()==null)
+      {
+        alert("Error","Public Key is null");
+      }
+      Key electionKey = KeyHelper.getRSAKeyFromBase64(el.getPublicKey(), true);
+      doc = XMLEncrypt.encryptAES(aesKey,electionKey,doc,choice,false);
+      //System.err.println("*** Encrypted Vote: ***");
+      //System.out.println(XMLHelper.documentToString(doc));
+      XMLHelper.documentToFile(doc, "client_encrypted_vote.xml");
+      XMLViewer.getInstance().addXML("Vote: #2: encrypted vote",XMLHelper.documentToString(doc));
     }
-    Key electionKey = KeyHelper.getRSAKeyFromBase64(el.getPublicKey(), true);
-    doc = XMLEncrypt.encryptAES(aesKey,electionKey,doc,choice,false);
-    //System.err.println("*** Encrypted Vote: ***");
-    //System.out.println(XMLHelper.documentToString(doc));
-    XMLHelper.documentToFile(doc, "client_encrypted_vote.xml");
-    XMLViewer.getInstance().addXML("Vote: #2: encrypted vote",XMLHelper.documentToString(doc));
 
     //Document doc2 = XMLEncrypt.decryptAES(doc, rsaKey.getPrivate());
     //System.err.println("*** Decrypted Vote: ***");
@@ -159,6 +164,21 @@ public class ClientHandler
    // XMLHelper.documentToFile(doc2, "client_decrypted_vote.xml");
     //XMLViewer.getInstance().addXML("Vote: #3: decrypted (debug)",XMLHelper.documentToString(doc));
     return doc;
+  }
+
+  protected boolean voteInPublic() throws Exception
+  {
+    // showInputDialog
+    int answer = JOptionPane.showConfirmDialog(null, "Do you want to vote in public?", "Public Vote?", JOptionPane.YES_NO_OPTION);
+    if(answer == JOptionPane.YES_OPTION)
+    {
+      return true;
+    }
+    else if(answer == JOptionPane.NO_OPTION)
+    {
+      return false;
+    }
+    throw new Exception("Neither Public nor private vote.");
   }
 
   public void vote(Election el, Choice ch)

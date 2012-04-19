@@ -20,7 +20,7 @@ public class ElectionTableModel extends AbstractTableModel
     this.els = els;
   }
 
-  private String[] columnNames = {"ID","Titel","Antworten #","Gültig bis"};
+  private String[] columnNames = {"ID","Title","Question","Answers #","Valid until"};
   Elections els = null;
 
   public void setData(Elections els)
@@ -65,8 +65,10 @@ public class ElectionTableModel extends AbstractTableModel
       case 1:
         return els.getElection().get(row).getTitle();
       case 2:
-        return els.getElection().get(row).getChoice().size();
+        return els.getElection().get(row).getQuestion();
       case 3:
+        return els.getElection().get(row).getChoice().size();
+      case 4:
         return els.getElection().get(row).getValidTo().toString();
       default:
         return "-";
