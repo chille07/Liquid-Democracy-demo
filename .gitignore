@@ -2,4 +2,7 @@
 vote*.xml
 rejection*.xml
 *~
-
+*.swp
+*/build/
+*/dist/
+Link to *
