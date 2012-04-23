@@ -4,17 +4,17 @@
 <xsd:import namespace="http://votingserver.chille.iaik/" schemaLocation="http://localhost:8084/VotingServer/VotingServer?xsd=1" />
 </xsd:schema>
 </types>
-<message name="rejectVote">
-<part name="parameters" element="tns:rejectVote" />
+<message name="getPublicKey">
+<part name="parameters" element="tns:getPublicKey" />
 </message>
-<message name="rejectVoteResponse">
-<part name="parameters" element="tns:rejectVoteResponse" />
+<message name="getPublicKeyResponse">
+<part name="parameters" element="tns:getPublicKeyResponse" />
 </message>
-<message name="getVotes">
-<part name="parameters" element="tns:getVotes" />
+<message name="getPublicVotes">
+<part name="parameters" element="tns:getPublicVotes" />
 </message>
-<message name="getVotesResponse">
-<part name="parameters" element="tns:getVotesResponse" />
+<message name="getPublicVotesResponse">
+<part name="parameters" element="tns:getPublicVotesResponse" />
 </message>
 <message name="getVote">
 <part name="parameters" element="tns:getVote" />
@@ -28,20 +28,26 @@
 <message name="registerVoteResponse">
 <part name="parameters" element="tns:registerVoteResponse" />
 </message>
-<message name="getPublicKey">
-<part name="parameters" element="tns:getPublicKey" />
+<message name="rejectVote">
+<part name="parameters" element="tns:rejectVote" />
 </message>
-<message name="getPublicKeyResponse">
-<part name="parameters" element="tns:getPublicKeyResponse" />
+<message name="rejectVoteResponse">
+<part name="parameters" element="tns:rejectVoteResponse" />
+</message>
+<message name="getVotes">
+<part name="parameters" element="tns:getVotes" />
+</message>
+<message name="getVotesResponse">
+<part name="parameters" element="tns:getVotesResponse" />
 </message>
 <portType name="VotingServer">
-<operation name="rejectVote">
-<input wsam:Action="http://votingserver.chille.iaik/VotingServer/rejectVoteRequest" message="tns:rejectVote" />
-<output wsam:Action="http://votingserver.chille.iaik/VotingServer/rejectVoteResponse" message="tns:rejectVoteResponse" />
+<operation name="getPublicKey">
+<input wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicKeyRequest" message="tns:getPublicKey" />
+<output wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicKeyResponse" message="tns:getPublicKeyResponse" />
 </operation>
-<operation name="getVotes">
-<input wsam:Action="http://votingserver.chille.iaik/VotingServer/getVotesRequest" message="tns:getVotes" />
-<output wsam:Action="http://votingserver.chille.iaik/VotingServer/getVotesResponse" message="tns:getVotesResponse" />
+<operation name="getPublicVotes">
+<input wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicVotesRequest" message="tns:getPublicVotes" />
+<output wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicVotesResponse" message="tns:getPublicVotesResponse" />
 </operation>
 <operation name="getVote">
 <input wsam:Action="http://votingserver.chille.iaik/VotingServer/getVoteRequest" message="tns:getVote" />
@@ -51,14 +57,18 @@
 <input wsam:Action="http://votingserver.chille.iaik/VotingServer/registerVoteRequest" message="tns:registerVote" />
 <output wsam:Action="http://votingserver.chille.iaik/VotingServer/registerVoteResponse" message="tns:registerVoteResponse" />
 </operation>
-<operation name="getPublicKey">
-<input wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicKeyRequest" message="tns:getPublicKey" />
-<output wsam:Action="http://votingserver.chille.iaik/VotingServer/getPublicKeyResponse" message="tns:getPublicKeyResponse" />
+<operation name="rejectVote">
+<input wsam:Action="http://votingserver.chille.iaik/VotingServer/rejectVoteRequest" message="tns:rejectVote" />
+<output wsam:Action="http://votingserver.chille.iaik/VotingServer/rejectVoteResponse" message="tns:rejectVoteResponse" />
+</operation>
+<operation name="getVotes">
+<input wsam:Action="http://votingserver.chille.iaik/VotingServer/getVotesRequest" message="tns:getVotes" />
+<output wsam:Action="http://votingserver.chille.iaik/VotingServer/getVotesResponse" message="tns:getVotesResponse" />
 </operation>
 </portType>
 <binding name="VotingServerPortBinding" type="tns:VotingServer">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
-<operation name="rejectVote">
+<operation name="getPublicKey">
 <soap:operation soapAction="" />
 <input>
 <soap:body use="literal" />
@@ -67,7 +77,7 @@
 <soap:body use="literal" />
 </output>
 </operation>
-<operation name="getVotes">
+<operation name="getPublicVotes">
 <soap:operation soapAction="" />
 <input>
 <soap:body use="literal" />
@@ -94,7 +104,16 @@
 <soap:body use="literal" />
 </output>
 </operation>
-<operation name="getPublicKey">
+<operation name="rejectVote">
+<soap:operation soapAction="" />
+<input>
+<soap:body use="literal" />
+</input>
+<output>
+<soap:body use="literal" />
+</output>
+</operation>
+<operation name="getVotes">
 <soap:operation soapAction="" />
 <input>
 <soap:body use="literal" />

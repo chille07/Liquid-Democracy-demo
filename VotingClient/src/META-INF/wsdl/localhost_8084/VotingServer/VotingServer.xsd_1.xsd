@@ -4,6 +4,10 @@
 
 <xs:element name="getPublicKeyResponse" type="tns:getPublicKeyResponse" />
 
+<xs:element name="getPublicVotes" type="tns:getPublicVotes" />
+
+<xs:element name="getPublicVotesResponse" type="tns:getPublicVotesResponse" />
+
 <xs:element name="getVote" type="tns:getVote" />
 
 <xs:element name="getVoteResponse" type="tns:getVoteResponse" />
@@ -52,6 +56,18 @@
 </xs:complexType>
 
 <xs:complexType name="registerVoteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getPublicVotes">
+<xs:sequence>
+<xs:element name="electionID" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getPublicVotesResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:string" minOccurs="0" />
 </xs:sequence>

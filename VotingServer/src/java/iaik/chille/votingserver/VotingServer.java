@@ -11,6 +11,7 @@ import iaik.chille.security.PropertyHandler;
 import iaik.chille.security.XMLHelper;
 import iaik.chille.security.XMLSignature;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 import java.security.Key;
 import java.security.KeyPair;
@@ -23,6 +24,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -125,13 +127,20 @@ public class VotingServer
   @WebMethod(operationName = "registerVote")
   public String registerVote(@WebParam(name = "vote") String xml)
   {
+    boolean publicvote = false;
     try{
       Document doc = XMLHelper.parseXML(xml);
-      Element el = (Element) doc.getElementsByTagName("election").item(0);
-      String elid = el.getAttribute("id");
 
       Element vote = (Element) doc.getElementsByTagName("vote").item(0);
       String voteid = vote.getAttribute("id");
+      if(vote.hasAttribute("user"))
+      {
+        publicvote = true;
+      }
+
+      Element el = (Element) doc.getElementsByTagName("election").item(0);
+      String elid = el.getAttribute("id");
+
 
       // TODO: check if elid exists on ElectionServer
       // elid is in collection of elections of ElectionServer
@@ -146,7 +155,10 @@ public class VotingServer
       String folder = "./votes/"+elid;
       File f = new File(folder);
       f.mkdirs();
-      XMLHelper.documentToFile(doc, folder+"/"+voteid+".xml");
+      String fn = folder+"/"+voteid+".xml";
+      if(publicvote)
+        fn = fn+".public";
+      XMLHelper.documentToFile(doc, fn);
 
       // give the Client a proof that we accepted the signature
       KeyPair kp = VotingServer.getKeyPair();
@@ -160,18 +172,73 @@ public class VotingServer
     }
   }
 
+
+  protected String getVotesInternal(String electionID, boolean publiconly)
+  {
+    if(electionID.contains("\\/"))
+      return "! invalid ElectionID";
+    File folder = new File("./votes/"+electionID+"/");
+    if(!folder.exists())
+      return "! Election dont exist or nobody voted.";
+    if(!folder.isDirectory())
+      return "! is not a directory";
+
+    File[] files = null;
+    if(publiconly)
+    {
+      files = folder.listFiles(new FilenameFilter() {
+
+        @Override
+        public boolean accept(File dir, String name) {
+           return name.endsWith(".public");
+        }
+      });
+    }
+    else
+    {
+      files = folder.listFiles();
+    }
+    if(files==null)
+      return "! is not a directory";
+
+    try
+    {
+      Document doc = XMLHelper.generateDocument();
+      Element parentel = doc.createElement("ballots");
+      doc.appendChild(parentel);
+
+      for(int i=0;i<files.length;i++)
+      {
+        try
+        {
+          if(files[i].isDirectory())continue;
+          Document doc2 = XMLHelper.fileToDocument(files[i].getAbsolutePath());
+          Node node = doc.importNode(doc2.getFirstChild(), true);
+          parentel.appendChild(node);
+        }
+        catch(Exception ex)
+        {
+          ex.printStackTrace();
+          return ex.getMessage();
+        }
+      }
+      return XMLHelper.documentToString(doc);
+    }
+    catch(Exception ex)
+    {
+      ex.printStackTrace();
+      return ex.getMessage();
+    }
+
+  }
+
   /**
    * Web service operation
    */
   @WebMethod(operationName = "rejectVote")
   public String rejectVote(@WebParam(name = "rejection") String rejection) {
-    //TODO: we dont have to implement this, but it could be nice
-    // if we could delete invalid votes
-
-    // --> check if signature of rejection Code is valid (by BallotSigner)
-    // --> delete the xml code from the file system
-    // --> sign the rejection and return it to the client
-    return null;
+    // we should not implement that
+    return "This should not be implemented, because the user could blame us deleting the vote.";
   }
 
   /**
@@ -179,8 +246,7 @@ public class VotingServer
    */
   @WebMethod(operationName = "getVotes")
   public String getVotes(@WebParam(name = "electionID") String electionID) {
-    //TODO: find all votes, put them in a single document and return it to the client
-    return null;
+    return getVotesInternal(electionID, false);
   }
 
   /**
@@ -197,6 +263,14 @@ public class VotingServer
     {
       return "* Error: "+ex.toString();
     }
+  }
+
+  /**
+   * Web service operation
+   */
+  @WebMethod(operationName = "getPublicVotes")
+  public String getPublicVotes(@WebParam(name = "electionID") String electionID) {
+    return getVotesInternal(electionID, true);
   }
 
 }

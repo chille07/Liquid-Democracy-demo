@@ -157,6 +157,10 @@ public class ClientHandler
       XMLHelper.documentToFile(doc, "client_encrypted_vote.xml");
       XMLViewer.getInstance().addXML("Vote: #2: encrypted vote",XMLHelper.documentToString(doc));
     }
+    else
+    {
+      vote.setAttribute("user", DataStorage.getData("username"));
+    }
 
     //Document doc2 = XMLEncrypt.decryptAES(doc, rsaKey.getPrivate());
     //System.err.println("*** Decrypted Vote: ***");
@@ -164,6 +168,26 @@ public class ClientHandler
    // XMLHelper.documentToFile(doc2, "client_decrypted_vote.xml");
     //XMLViewer.getInstance().addXML("Vote: #3: decrypted (debug)",XMLHelper.documentToString(doc));
     return doc;
+  }
+
+  /**
+   * lists all the proxies that already have votes for that.
+   * @param el
+   */
+  public void showDelegations(Election el)
+  {
+    try{
+      VotingServer vs = getVotingServerPort();
+      String xml = vs.getPublicVotes(el.getId());
+     // Document doc = XMLHelper.parseXML(xml);
+      XMLViewer.getInstance().addXML("Proxy votes",xml);
+      
+    }
+    catch(Exception ex)
+    {
+      System.err.println("Voting failed: "+ex.toString());
+      ex.printStackTrace();
+    }
   }
 
   protected boolean voteInPublic() throws Exception
@@ -273,7 +297,18 @@ public class ClientHandler
 
   public void verify(Election el)
   {
-    // TODO
+    try{
+      VotingServer vs = getVotingServerPort();
+      String xml = vs.getVotes(el.getId());
+     // Document doc = XMLHelper.parseXML(xml);
+
+      XMLViewer.getInstance().addXML("Verify XML",xml);
+    }
+    catch(Exception ex)
+    {
+      System.err.println("Voting failed: "+ex.toString());
+      ex.printStackTrace();
+    }
   }
 
   /**

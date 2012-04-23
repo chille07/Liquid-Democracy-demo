@@ -58,6 +58,7 @@ public class MainFrame2 extends java.awt.Frame {
 
         panelAction = new javax.swing.JPanel();
         btnVote = new javax.swing.JButton();
+        btnDelegation = new javax.swing.JButton();
         btnRevert = new javax.swing.JButton();
         btnVerify = new javax.swing.JButton();
         btnTest = new javax.swing.JButton();
@@ -68,7 +69,6 @@ public class MainFrame2 extends java.awt.Frame {
         tableChoice = new javax.swing.JTable();
 
         setName("");
-        setPreferredSize(new java.awt.Dimension(452, 443));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 exitForm(evt);
@@ -82,6 +82,14 @@ public class MainFrame2 extends java.awt.Frame {
             }
         });
         panelAction.add(btnVote);
+
+        btnDelegation.setText("Show Proxies");
+        btnDelegation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelegationActionPerformed(evt);
+            }
+        });
+        panelAction.add(btnDelegation);
 
         btnRevert.setText("Revert");
         btnRevert.addActionListener(new java.awt.event.ActionListener() {
@@ -156,21 +164,50 @@ public class MainFrame2 extends java.awt.Frame {
   }//GEN-LAST:event_btnVoteActionPerformed
 
   private void btnRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevertActionPerformed
-    // TODO add your handling code here:
+    if(tableElection.getSelectedRows().length == 1)
+    {
+      Election selectedElection = this.data.getElection().get(tableElection.getSelectedRow());
+      ClientHandler.getInstance().reject(selectedElection);
+    }
+    else
+    {
+      ClientHandler.getInstance().alert("Error", "You must select a single election for rejection.");
+    }
   }//GEN-LAST:event_btnRevertActionPerformed
 
   private void btnVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyActionPerformed
-    // TODO add your handling code here:
+    if(tableElection.getSelectedRows().length == 1)
+    {
+      Election selectedElection = this.data.getElection().get(tableElection.getSelectedRow());
+      ClientHandler.getInstance().verify(selectedElection);
+    }
+    else
+    {
+      ClientHandler.getInstance().alert("Error", "You must select a single election for verification.");
+    }
   }//GEN-LAST:event_btnVerifyActionPerformed
 
   private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
     ClientHandler.getInstance().test(null, null);
   }//GEN-LAST:event_btnTestActionPerformed
 
+  private void btnDelegationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelegationActionPerformed
+    if(tableElection.getSelectedRows().length == 1)
+    {
+      Election selectedElection = this.data.getElection().get(tableElection.getSelectedRow());
+      ClientHandler.getInstance().showDelegations(selectedElection);
+    }
+    else
+    {
+      ClientHandler.getInstance().alert("Error", "You must select a single election for viewing delegations.");
+    }
+  }//GEN-LAST:event_btnDelegationActionPerformed
+
     private Elections data = null;
     private ChoiceTableModel ctm = new ChoiceTableModel();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelegation;
     private javax.swing.JButton btnRevert;
     private javax.swing.JButton btnTest;
     private javax.swing.JButton btnVerify;
