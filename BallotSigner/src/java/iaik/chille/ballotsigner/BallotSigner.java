@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package iaik.chille.ballotsigner;
 
 import iaik.chille.security.KeyHelper;
@@ -98,11 +94,12 @@ public class BallotSigner
         // note: we cannot access the encrypted vote here.
 
         // TODO: check if electionid is valid
-        if(election.getAttribute("id").compareTo("ABC")==0)
+        if(election.getAttribute("id").compareTo("ABC")==0) // dummy operation
         {
           return "* Vote rejected: Election is not valid at this time.";
         }
-        if("blubb".equals(id)) // TODO: user has already voted
+        // TODO: user has already voted?
+        if("blubb".equals(id))  // dummy operation
         {
           return "* Vote rejected: User has already voted.";
         }
@@ -160,7 +157,7 @@ public class BallotSigner
       rejectionList.setAttribute("electionid", electionid);
       doc.appendChild(rejectionList);
 
-      //schleife
+      // TODO: implement
       {
         Element rejection = doc.createElement("rejection");
         rejection.setAttribute("id","TODO");
@@ -186,7 +183,36 @@ public class BallotSigner
   @WebMethod(operationName = "reject")
   public String reject(@WebParam(name = "rejection_vote") String rejection_vote)
   {
-    return rejectionCode;
+    try{
+      Document doc = XMLHelper.parseXML(rejection_vote);
+      KeyPair kp = BallotSigner.getKeyPair();
+      boolean validSignature = XMLSignature.validate(doc, null, kp.getPublic());
+      if(validSignature)
+      {
+        Element rejection = (Element)doc.getElementsByTagName("rejection");
+        String ballotid = rejection.getAttribute("id");
+        Element election = (Element) rejection.getElementsByTagName("election");
+        String electionID = election.getAttribute("id");
+        
+        // TODO: check if election exists
+        // TODO: check if user is logged in
+        // TODO: add ballotID to electionIDs rejection list
+        // TODO: restore users possibility to vote
+        
+        rejection.setAttribute("rejected", "true");
+
+        return XMLHelper.documentToString(doc);
+      }
+      else
+      {
+        return "! Error: invalid Signature";
+      }
+    }
+    catch(Exception ex)
+    {
+      ex.printStackTrace();
+      return "! Exception: "+ex.getMessage();
+    }
   }
 
   /**

@@ -16,20 +16,25 @@ import iaik.chille.security.XMLSignature;
 import iaik.chille.votingclient.VotingServer;
 import iaik.chille.votingclient.VotingServer_Service;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Key;
 import java.security.KeyPair;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -177,15 +182,70 @@ public class ClientHandler
   public void showDelegations(Election el)
   {
     try{
+      String output = "";
       VotingServer vs = getVotingServerPort();
       String xml = vs.getPublicVotes(el.getId());
-     // Document doc = XMLHelper.parseXML(xml);
       XMLViewer.getInstance().addXML("Proxy votes",xml);
+
       
+      Document doc = XMLHelper.parseXML(xml);
+      NodeList votes = doc.getElementsByTagName("vote");
+      for(int i=0;i<votes.getLength();i++)
+      {
+        try
+        {
+          Element vote = (Element) votes.item(i);
+          Element election = (Element) vote.getElementsByTagName("election").item(0);
+          Element choice = (Element) election.getElementsByTagName("choice").item(0);
+          String ballotid = vote.getAttribute("id");
+          String username = vote.getAttribute("user");
+          String electionID = election.getAttribute("id");
+          String choiceID = choice.getAttribute("id");
+
+          if(el.getId().compareTo(electionID)!=0)
+          {
+            System.err.println("Server send vote with wrong electionID. Ignored.");
+            System.err.println("1: "+el.getId());
+            System.err.println("2: "+electionID);
+            continue;
+          }
+          Choice c = null;
+          List<Choice> choices = el.getChoice();
+          for(int j=0;j<choices.size();j++)
+          {
+            Choice c_tmp = choices.get(j);
+            if(c_tmp.getId().compareTo(choiceID)==0)
+            {
+              c = c_tmp;
+            }
+          }
+          if(c==null)
+          {
+            System.err.println("Server send vote with invalid choiceID. Ignored.");
+            continue;
+          }
+
+          // TODO: check if ballotid is not on revocationlist of its ballot signer.
+          output = output + "'" + username + "' voted for '"+c.getAnswer()+"'\n";
+          
+        }
+        catch(Exception ex)
+        {
+          System.err.println("Exception occured on parsing vote. Ignored.");
+          ex.printStackTrace();
+        }
+      }
+      if(output.compareTo("")==0)
+      {
+        output = "none";
+      }
+      this.alert("Available Delegations",
+              "The following votes are public available: \n"+ output+
+              "\n\nYour vote could be delegated to one of the users.");
     }
-    catch(Exception ex)
+    catch(ParserConfigurationException | SAXException | IOException ex)
     {
-      System.err.println("Voting failed: "+ex.toString());
+      System.err.println("Viewing Delegations failed: "+ex.toString());
       ex.printStackTrace();
     }
   }
@@ -210,6 +270,12 @@ public class ClientHandler
     try
     {
       //alert("Trying to vote...","Election: "+el.getId()+" -> Choice: "+ch.getId());
+      File rejectionFile = new File("rejection_"+el.getId()+".xml");
+      if(rejectionFile.exists())
+      {
+        this.alert("Already Voted", "You have already voted for this Election!");
+        return;
+      }
 
       // login to the ballotsigner
       BallotSigner bs = getBallotSignerPort();
@@ -292,7 +358,34 @@ public class ClientHandler
 
   public void reject(Election el)
   {
-    // TODO
+    try{
+      File rejectionFile = new File("rejection_"+el.getId()+".xml");
+      if(!rejectionFile.exists())
+      {
+        this.alert("Not Voted Yet", "You have not voted for this Election!");
+        return;
+      }
+
+      // notify the BallotSigner about invalid vote
+      BallotSigner bs = this.getBallotSignerPort();
+
+      Document doc = XMLHelper.fileToDocument(rejectionFile.getAbsolutePath());
+      String returned = bs.reject(XMLHelper.documentToString(doc));
+
+
+      rejectionFile.delete();
+      rejectionFile = new File("vote_"+el.getId()+".xml");
+      if(rejectionFile.exists())
+      {
+        rejectionFile.delete();
+      }
+      this.alert("Rejected", "Your vote was successfully rejected: \n\n"+returned);
+    }
+    catch(Exception ex)
+    {
+      System.err.println(ex.getMessage());
+      ex.printStackTrace();
+    }
   }
 
   public void verify(Election el)

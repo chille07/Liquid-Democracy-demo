@@ -38,7 +38,7 @@ public class ElectionProvider {
   @WebMethod(operationName = "getVersion")
   public String getVersion()
   {
-    return "1.0.1 alpha";
+    return "1.0.2 alpha";
   }
 
 
@@ -57,7 +57,7 @@ public class ElectionProvider {
       // read elections from database and add to xml:
       els.getElection().addAll(ElectionManager.getInstance().findElections());
 
-      // ...
+      // This was an example of creating elections without database support
       {
       /*
         Election el = of.createElection();
@@ -118,10 +118,11 @@ public class ElectionProvider {
   }
 
   /**
-   * Web service operation
+   * Web service operation: Returns a newline separated list of VotingServers
    */
   @WebMethod(operationName = "getVotingServers")
   public String getVotingServers() {
-    return "asdf";
+    // TODO: implement, it is not used by now
+    return "http://localhost:80/...";
   }
 }
